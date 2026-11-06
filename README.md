@@ -12,4 +12,5 @@ copy the following commands one by one:
 git clone https://github.com/ibubasid1/ssi-management.git
 cd ssi-management
 npm ci
+npm run dev #this starts the server
 ```
