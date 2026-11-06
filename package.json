@@ -1,0 +1,8 @@
+{
+"name": "ssi-management",
+"private": true,
+"workspaces": ["client", "server"],
+"engines": {
+"node": "^24.13.1"
+}
+}
