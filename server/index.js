@@ -20,6 +20,8 @@ app.get('/api/auth/verify', async (req, res) => {
   const correctCode = await pool.query('SELECT code FROM users WHERE email = $1', [email]);
   if(code != correctCode) res.status(400).json({error: 'Incorrect Code'});
   else{
+    const expiryTime = await pool.query('SELECT code_expiry_time FROM users WHERE email = $1', [email]);
+    if(Date.now() > expiryTime) res.status(400).json({error: 'Code timed out'});
     await pool.query('UPDATE users SET verified TO $1 WHERE email = $2', ['true', email]);
     res.status(201).json({status: 'Account created successfully'});
   }
