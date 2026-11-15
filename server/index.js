@@ -1,6 +1,6 @@
 import express from 'express';
 import pool from './db.js';
-import sendVerificationCode from './verification.js';
+import {sendVerificationCode} from './verification.js';
 
 setInterval(async () => {
   await pool.query("DELETE FROM users WHERE verified = false AND code_expiry_time + interval '20 minutes' < $1",

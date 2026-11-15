@@ -1,5 +1,5 @@
 import {randomInt} from 'crypto';
-import {pool} from './db.js';
+import pool from './db.js';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({

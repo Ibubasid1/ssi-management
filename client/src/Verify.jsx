@@ -27,12 +27,28 @@ function Verify()
         }
     }
 
+    async function handleResend()
+    {
+        const res = await fetch('/api/auth/resend-code', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email}),
+        })
+        const data = await res.json()
+        if(res.ok) {
+            setMessage(data.status);
+        } else {
+            setMessage(data.error);
+        }
+    }
+
      return (
         <>
         <h1>Enter the code sent to {email}</h1>
         <input value = {code} onChange={(e) => setCode(e.target.value)} />
         <button onClick={handleSubmit}>Verify</button>
         <p>{message}</p>
+        <button onClick={handleResend}>Resend Code</button>
         </>
      );
 }
