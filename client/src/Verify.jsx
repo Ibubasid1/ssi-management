@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useLocation, Navigate} from 'react-router';
+import './Verify.css';
 
 function Verify()
 {
@@ -43,13 +44,14 @@ function Verify()
     }
 
      return (
-        <>
-        <h1>Enter the code sent to {email}</h1>
+        <div className="verify-page">
+        <h1>Verify your email</h1>
+        <p>We emailed a code to<br/><strong>{email}</strong></p>
         <input value = {code} onChange={(e) => setCode(e.target.value)} />
         <button onClick={handleSubmit}>Verify</button>
         <p>{message}</p>
         <button onClick={handleResend}>Resend Code</button>
-        </>
+        </div>
      );
 }
 
