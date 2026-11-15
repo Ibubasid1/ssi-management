@@ -18,6 +18,8 @@ function Verify()
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({email, code}),
         })
+        const data = await res.json()
+        console.log(res.status, data)
     }
 
      return (
