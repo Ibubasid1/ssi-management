@@ -32,7 +32,7 @@ function Verify() {
             if (res.ok) {
                 setMessage('Account verified');
             } else {
-                setMessage(data.error);
+                setMessage(data.message);
             }
         } catch {
             setMessage('Something went wrong. Please try again.');
@@ -62,10 +62,10 @@ function Verify() {
             })
             const data = await res.json()
             if (res.ok) {
-                setMessage(data.status);
+                setMessage(data.data.message);
                 setSecondsLeft(30);
             } else {
-                setMessage(data.error);
+                setMessage(data.message);
             }
         } catch {
             setMessage('Something went wrong. Please try again.');
