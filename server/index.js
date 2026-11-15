@@ -15,7 +15,7 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-app.get('/api/auth/verify', async (req, res) => {
+app.post('/api/auth/verify', async (req, res) => {
   [email, code] = req.body;
   const correctCode = await pool.query('SELECT code FROM users WHERE email = $1', [email]);
   if(code != correctCode) res.status(400).json({error: 'Incorrect Code'});
@@ -28,5 +28,5 @@ app.get('/api/auth/verify', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log("Server running on http://localhost:${PORT}");
+    console.log(`Server running on http://localhost:${PORT}`);
 });
