@@ -5,6 +5,7 @@ function Verify()
 {
     const location = useLocation();
     const [code, setCode] = useState('');
+    const [message, setMessage] = useState('');
 
     if(!location.state?.email) {
         return <Navigate to="/signup" replace/>
@@ -19,7 +20,11 @@ function Verify()
             body: JSON.stringify({email, code}),
         })
         const data = await res.json()
-        console.log(res.status, data)
+        if(res.ok) {
+            setMessage('Account verified');
+        } else {
+            setMessage(data.error);
+        }
     }
 
      return (
@@ -27,6 +32,7 @@ function Verify()
         <h1>Enter the code sent to {email}</h1>
         <input value = {code} onChange={(e) => setCode(e.target.value)} />
         <button onClick={handleSubmit}>Verify</button>
+        <p>{message}</p>
         </>
      );
 }
