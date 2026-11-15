@@ -22,6 +22,7 @@ app.get('/api/health', async (req, res) => {
 
 app.post('/api/auth/verify', async (req, res) => {
   const {email, code} = req.body;
+  if(!email || !code) return res.status(400).json({error: 'Missing field(s)'});
   const query = await pool.query('SELECT code, code_expiry_time FROM users WHERE email = $1', [email]);
   if(query.rows.length == 0) return res.status(400).json({error: 'No user has this email'});
   if(code != query.rows[0].code) return res.status(400).json({error: 'Incorrect Code'});

@@ -8,5 +8,5 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     code integer,
     code_expiry_time TIMESTAMPTZ,
-    verified boolean
+    verified boolean not null default false
 );
