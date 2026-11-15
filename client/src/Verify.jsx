@@ -37,7 +37,6 @@ function Verify() {
         } catch {
             setMessage('Something went wrong. Please try again.');
         }
-
     }
 
     function handleDigitChange(i, value) {
@@ -55,17 +54,21 @@ function Verify() {
     }
 
     async function handleResend() {
-        const res = await fetch('/api/auth/resend-code', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email }),
-        })
-        const data = await res.json()
-        if (res.ok) {
-            setMessage(data.status);
-            setSecondsLeft(30);
-        } else {
-            setMessage(data.error);
+        try {
+            const res = await fetch('/api/auth/resend-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            })
+            const data = await res.json()
+            if (res.ok) {
+                setMessage(data.status);
+                setSecondsLeft(30);
+            } else {
+                setMessage(data.error);
+            }
+        } catch {
+            setMessage('Something went wrong. Please try again.');
         }
     }
 
