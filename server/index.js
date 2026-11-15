@@ -27,7 +27,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.post('/api/auth/verify', async (req, res) => {
-  const {email, code} = req.body;
+  const {email, code} = req.body ?? {};
   if(!email || !code) return res.status(400).json({code: 400, message: 'Missing field(s)'});
   const query = await pool.query('SELECT code, code_expiry_time FROM users WHERE email = $1', [email]);
   if(query.rows.length == 0) return res.status(400).json({code: 400, message: 'No user has this email'});
@@ -40,12 +40,18 @@ app.post('/api/auth/verify', async (req, res) => {
 });
 
 app.post('/api/auth/resend-code', async (req, res) => {
-  const {email} = req.body;
+  const {email} = req.body ?? {};
   if(!email) return res.status(400).json({code: 400, message: "Missing email field"});
   const query = await pool.query('SELECT 1 FROM users WHERE email = $1 AND verified = false', [email]);
   if(query.rows.length == 0) return res.status(404).json({code: 404, message: 'No pending sign-up for this email'});
   await sendVerificationCode(email);
   res.status(200).json({data: {message: 'New code sent'}});
+});
+
+app.use((err, req, res, next) => {
+  if(err.status == 400) return res.status(400).json({code: 400, message: 'Invalid request body'});
+  console.error(err);
+  res.status(500).json({code: 500, message: 'Something went wrong on our server'});
 });
 
 app.listen(PORT, () => {
