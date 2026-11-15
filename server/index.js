@@ -1,5 +1,6 @@
 import express from 'express';
 import pool from './db.js';
+import sendVerificationCode from './verification.js';
 
 setInterval(async () => {
   await pool.query("DELETE FROM users WHERE verified = false AND code_expiry_time + interval '20 minutes' < $1",
@@ -29,6 +30,15 @@ app.post('/api/auth/verify', async (req, res) => {
     await pool.query('UPDATE users SET verified = $1 WHERE email = $2', ['true', email]);
     res.status(201).json({status: 'Account created successfully'});
   }
+});
+
+app.post('/api/auth/resend-code', async (req, res) => {
+  const {email} = req.body;
+  if(!email) return res.status(400).json({error: "Missing email field"});
+  const query = await pool.query('SELECT 1 FROM users WHERE email = $1 AND verified = false', [email]);
+  if(query.rows.length == 0) return res.status(404).json({error: 'No pending sign-up for this email'});
+  await sendVerificationCode(email);
+  res.status(200).json({status: 'New code sent'});
 });
 
 app.listen(PORT, () => {
