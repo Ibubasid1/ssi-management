@@ -1,10 +1,11 @@
 import express from 'express';
 import pool from './db.js';
-
+import changePasswordRouter from './routes/changePassword.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use('/api/auth', changePasswordRouter);
 
 app.get('/api/health', async (req, res) => {
   try {
