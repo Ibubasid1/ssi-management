@@ -18,12 +18,12 @@ app.get('/api/health', async (req, res) => {
 app.post('/api/auth/verify', async (req, res) => {
   const {email, code} = req.body;
   const correctCode = await pool.query('SELECT code FROM users WHERE email = $1', [email]);
-  if(code != correctCode) return res.status(400).json({error: 'Incorrect Code'});
+  if(code != correctCode.rows[0].code) return res.status(400).json({error: 'Incorrect Code'});
   else{
     const expiryExists = await pool.query('SELECT code_expiry_time IS NULL AS is_empty FROM users WHERE email = $1', [email]);
     const expiryTime = await pool.query('SELECT code_expiry_time FROM users WHERE email = $1', [email]);
-    if(Date.now() > expiryTime && !expiryExists) return res.status(400).json({error: 'Code timed out'});
-    await pool.query('UPDATE users SET verified TO $1 WHERE email = $2', ['true', email]);
+    if(Date.now() > expiryTime.rows[0].code_expiry_time && !expiryExists.rows[0].is_empty) return res.status(400).json({error: 'Code timed out'});
+    await pool.query('UPDATE users SET verified = $1 WHERE email = $2', ['true', email]);
     res.status(201).json({status: 'Account created successfully'});
   }
 });
