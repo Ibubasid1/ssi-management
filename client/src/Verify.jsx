@@ -12,11 +12,19 @@ function Verify()
 
      const email = location.state.email;
 
+    async function handleSubmit() {
+        const res = await fetch('/api/auth/verify', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email, code}),
+        })
+    }
+
      return (
         <>
         <h1>Enter the code sent to {email}</h1>
         <input value = {code} onChange={(e) => setCode(e.target.value)} />
-        <button>Verify</button>
+        <button onClick={handleSubmit}>Verify</button>
         </>
      );
 }
