@@ -22,17 +22,22 @@ function Verify() {
     const email = location.state.email;
 
     async function handleSubmit() {
-        const res = await fetch('/api/auth/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, code }),
-        })
-        const data = await res.json()
-        if (res.ok) {
-            setMessage('Account verified');
-        } else {
-            setMessage(data.error);
+        try {
+            const res = await fetch('/api/auth/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, code }),
+            })
+            const data = await res.json()
+            if (res.ok) {
+                setMessage('Account verified');
+            } else {
+                setMessage(data.error);
+            }
+        } catch {
+            setMessage('Something went wrong. Please try again.');
         }
+
     }
 
     function handleDigitChange(i, value) {
