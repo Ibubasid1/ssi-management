@@ -1,6 +1,10 @@
 import express from 'express';
 import pool from './db.js';
 
+setInterval(async () => {
+  await pool.query("DELETE FROM users WHERE verified = false AND code_expiry_time + interval '20 minutes' < $1",
+     [new Date()])}, 60 * 1000);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
