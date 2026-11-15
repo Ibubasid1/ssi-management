@@ -22,6 +22,10 @@ function Verify() {
     const email = location.state.email;
 
     async function handleSubmit() {
+        if (code.length < 6) {
+            setMessage('Enter all 6 digits');
+            return;
+        }
         try {
             const res = await fetch('/api/auth/verify', {
                 method: 'POST',
@@ -85,6 +89,7 @@ function Verify() {
                             if (e.target.value) e.target.nextElementSibling?.focus();
                         }} onKeyDown={(e) => {
                             if (e.key == 'Backspace' && !e.target.value) e.target.previousElementSibling?.focus();
+                            if (e.key == 'Enter') handleSubmit();
                             if (e.key.length == 1 && !e.ctrlKey && !e.metaKey) {
                                 e.preventDefault();
                                 handleDigitChange(i, e.key);
