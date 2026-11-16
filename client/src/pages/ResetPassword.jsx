@@ -62,12 +62,14 @@ function ResetPassword() {
   return (
     <main>
       <h1>Set a new password</h1>
+      <p>Opened from the reset link in your email.</p>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="newPassword">New password</label>
         <input
           id="newPassword"
           type="password"
+          placeholder="Minimum 8 characters"
           value={newPassword}
           onChange={(event) => setNewPassword(event.target.value)}
           required
@@ -76,12 +78,13 @@ function ResetPassword() {
         <input
           id="confirmPassword"
           type="password"
+          placeholder="Re-enter password"
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
           required
         />
         <button type="submit" disabled={isLoading || Boolean(message)}>
-          {isLoading ? 'Saving...' : 'Reset password'}
+          {isLoading ? 'Saving...' : 'Save new password'}
         </button>
       </form>
 

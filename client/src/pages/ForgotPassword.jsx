@@ -36,13 +36,14 @@ function ForgotPassword() {
   return (
     <main>
       <h1>Forgot password</h1>
-      <p>Enter your registered email and we will send you a reset link.</p>
+      <p>Enter your email and we'll send a reset link.</p>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">University email</label>
         <input
           id="email"
           type="email"
+          placeholder="name@university.edu"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
@@ -56,7 +57,7 @@ function ForgotPassword() {
       {error && <p role="alert">{error}</p>}
 
       <p>
-        <Link to="/login">Back to login</Link>
+        <Link to="/login">← Back to log in</Link>
       </p>
     </main>
   )
