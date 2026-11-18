@@ -28,18 +28,10 @@ createRoot(document.getElementById('root')).render(
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Login />} />
-        <RequireRole roles={['STUDENT']}>
-        <Route path="/student" element={<StudentDashboard />} />
-        </RequireRole>
-        <RequireRole roles={['ORGANIZER']}>
-        <Route path="/organizer" element={<OrganizerDashboard />} />
-        </RequireRole>
-        <RequireRole roles={['ADMIN']}>
-        <Route path="/admin" element={<AdminDashboard />} />
-        </RequireRole>
-        <RequireRole roles={['STUDENT', 'ORGANIZER', 'ADMIN ']}>
-        <Route path="/change-password" element={<ChangePassword />} />
-        </RequireRole>
+        <Route path="/student" element={<RequireRole roles={['STUDENT']}><StudentDashboard /></RequireRole>} />
+        <Route path="/organizer" element={<RequireRole roles={['ORGANIZER']}><OrganizerDashboard /></RequireRole>} />
+        <Route path="/admin" element={<RequireRole roles={['ADMIN']}><AdminDashboard /></RequireRole>} />
+        <Route path="/change-password" element={<RequireRole roles={['STUDENT', 'ORGANIZER', 'ADMIN ']}><ChangePassword /></RequireRole>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
