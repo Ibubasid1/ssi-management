@@ -24,14 +24,15 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<RootRedirect />} /> and <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<RootRedirect />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Login />} />
         <Route path="/student" element={<RequireRole roles={['STUDENT']}><StudentDashboard /></RequireRole>} />
         <Route path="/organizer" element={<RequireRole roles={['ORGANIZER']}><OrganizerDashboard /></RequireRole>} />
         <Route path="/admin" element={<RequireRole roles={['ADMIN']}><AdminDashboard /></RequireRole>} />
-        <Route path="/change-password" element={<RequireRole roles={['STUDENT', 'ORGANIZER', 'ADMIN ']}><ChangePassword /></RequireRole>} />
+        <Route path="/change-password" element={<RequireRole roles={['STUDENT', 'ORGANIZER', 'ADMIN']}><ChangePassword /></RequireRole>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>

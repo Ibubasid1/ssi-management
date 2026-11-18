@@ -27,11 +27,11 @@ app.use('/api/auth', passwordResetRouter);
 app.use('/api/auth', changePasswordRouter);
 
 app.use((err, req, res, next) => {
-  if(err.status >= 400 && err.status < 500) return res.status(400).json({code: 400, message: 'Invalid request body'});
-console.error(err);
-res.status(500).json({code: 500, message: 'Something went wrong on our server'});
+  if (err.status >= 400 && err.status < 500) return res.status(400).json({ code: 400, message: 'Invalid request body' });
+  console.error(err);
+  res.status(500).json({ code: 500, message: 'Something went wrong on our server' });
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
