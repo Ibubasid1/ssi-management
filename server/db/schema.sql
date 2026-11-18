@@ -4,7 +4,7 @@ CREATE SCHEMA public;
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE CHECK (email = LOWER(email)),,
+    email TEXT NOT NULL UNIQUE CHECK (email = LOWER(email)),
     password_hash TEXT NOT NULL,
     role text NOT NULL CHECK (ROLE IN ('STUDENT', 'ORGANIZER', 'ADMIN')),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
