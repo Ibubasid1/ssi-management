@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import pool from '../db.js';
-import { secondVerificationCode } from '../verification.js';
+import { sendVerificationCode } from '../verification.js';
 
 const router = Router();
 
