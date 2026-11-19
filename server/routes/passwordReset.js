@@ -2,7 +2,7 @@ import { Router } from 'express';
 import crypto from 'node:crypto';
 import bcrypt from 'bcryptjs';
 import pool from '../db.js';
-import { sendPasswordResetEmail } from '../mailer.js';
+import { sendPasswordResetEmail } from '../resetMailer.js';
 
 const router = Router();
 const resetTokenMinutes = 60;
