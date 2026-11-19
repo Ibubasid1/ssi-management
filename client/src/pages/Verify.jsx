@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useLocation, Navigate } from 'react-router';
+import { useLocation, Navigate, useNavigate } from 'react-router';
 import './Verify.css';
 
 function Verify() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [digits, setDigits] = useState(['', '', '', '', '', '']);
     const code = digits.join('');
     const [secondsLeft, setSecondsLeft] = useState(30);
@@ -35,6 +36,7 @@ function Verify() {
             const data = await res.json()
             if (res.ok) {
                 setMessage('Account verified');
+                setTimeout(() => navigate('/login', {replace: true}), 2000);
             } else {
                 setMessage(data.message);
             }

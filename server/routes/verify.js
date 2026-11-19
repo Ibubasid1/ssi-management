@@ -17,13 +17,12 @@ router.post('/verify', async (req, res) => {
   const {email, code} = req.body ?? {};
   if(!email || !code) return res.status(400).json({code: 400, message: 'Missing field(s)'});
   const query = await pool.query('SELECT code, code_expiry_time, verified FROM users WHERE email = $1', [email]);
-  if(query.rows.length == 0) return res.status(400).json({code: 400, message: 'No user has this email'});
-  if(query.rows[0].verified) return res.status(409).json({code: 409, message: 'Account already verified'});
+  if(query.rows.length == 0 || query.rows[0].verified) return res.status(400).json({code: 400, message: 'No user has this email or user is already verified'});
   if(code != query.rows[0].code) return res.status(400).json({code: 400, message: 'Incorrect Code'});
   else{
     if(!query.rows[0].code_expiry_time || Date.now() > query.rows[0].code_expiry_time) return res.status(400).json({code: 400, message: 'Code timed out'});
-    const update = await pool.query('UPDATE users SET verified = $1, code = NULL, code_expiry_time = NULL WHERE email = $2 RETURNING id', ['true', email]);
-    res.status(201).json({data: {user_id: String(update.rows[0].id)}});
+    const update = await pool.query('UPDATE users SET verified = $1, code = NULL, code_expiry_time = NULL WHERE email = $2 RETURNING id, role', ['true', email]);
+    res.status(201).json({data: {user_id: String(update.rows[0].id), role: update.rows[0].role}});
   }
 });
 
