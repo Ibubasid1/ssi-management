@@ -6,6 +6,12 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'student',
+    role TEXT NOT NULL DEFAULT 'STUDENT' CHECK (role IN ('STUDENT', 'ORGANIZER', 'ADMIN')),
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE allowed_role_emails (
+    email TEXT PRIMARY KEY,
+    role TEXT NOT NULL CHECK (role IN ('ORGANIZER', 'ADMIN'))
 );
