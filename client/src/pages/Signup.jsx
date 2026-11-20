@@ -1,15 +1,18 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+const UNIVERSITY_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@(khi\.)?iba\.edu\.pk$/i;
 
 function Signup() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    role: 'student',
+    role: 'STUDENT',
   });
   const [error, setError] = useState('');
-  const [successUser, setSuccessUser] = useState(null);
+  const [successData, setSuccessData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -20,20 +23,20 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setSuccessUser(null);
+    setSuccessData(null);
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.password) {
       setError('Please fill in all required fields.');
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (!UNIVERSITY_EMAIL_REGEX.test(formData.email.trim())) {
+      setError('Please enter a valid IBA university email (@khi.iba.edu.pk or @iba.edu.pk).');
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match.');
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters.');
       return;
     }
 
@@ -43,25 +46,24 @@ function Signup() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
           password: formData.password,
           role: formData.role,
         }),
       });
 
-      const data = await response.json();
+      const body = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Signup failed.');
+        setError(body.message || 'Signup failed.');
       } else {
-        setSuccessUser(data.user);
+        setSuccessData(body.data);
         setFormData({
           name: '',
           email: '',
           password: '',
-          confirmPassword: '',
-          role: 'student',
+          role: 'STUDENT',
         });
       }
     } catch {
@@ -82,9 +84,9 @@ function Signup() {
         </div>
       )}
 
-      {successUser && (
+      {successData && (
         <div style={{ padding: '0.75rem', marginBottom: '1rem', backgroundColor: '#dcfce7', color: '#166534', borderRadius: '4px' }}>
-          Account created for <strong>{successUser.name}</strong> ({successUser.email}) as <strong>{successUser.role}</strong>!
+          Verification code sent to <strong>{successData.email}</strong> ({successData.status}).
         </div>
       )}
 
@@ -102,13 +104,13 @@ function Signup() {
         </div>
 
         <div>
-          <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 500 }}>Email</label>
+          <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 500 }}>University Email</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="name@example.com"
+            placeholder="name@khi.iba.edu.pk"
             style={{ width: '100%', padding: '0.5rem', boxSizing: 'border-box' }}
           />
         </div>
@@ -121,9 +123,9 @@ function Signup() {
             onChange={handleChange}
             style={{ width: '100%', padding: '0.5rem', boxSizing: 'border-box' }}
           >
-            <option value="student">Student</option>
-            <option value="faculty">Faculty</option>
-            <option value="staff">Staff</option>
+            <option value="STUDENT">Student</option>
+            <option value="ORGANIZER">Organizer</option>
+            <option value="ADMIN">Admin</option>
           </select>
         </div>
 
@@ -134,19 +136,7 @@ function Signup() {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="At least 6 characters"
-            style={{ width: '100%', padding: '0.5rem', boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 500 }}>Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Re-enter password"
+            placeholder="At least 8 characters"
             style={{ width: '100%', padding: '0.5rem', boxSizing: 'border-box' }}
           />
         </div>
@@ -156,9 +146,23 @@ function Signup() {
           disabled={loading}
           style={{ marginTop: '0.5rem', padding: '0.65rem', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer' }}
         >
-          {loading ? 'Creating Account...' : 'Sign Up'}
+          {loading ? 'Signing Up...' : 'Sign Up'}
         </button>
       </form>
+
+      <p style={{ marginTop: '1.25rem', marginBottom: 0, textAlign: 'center', fontSize: '0.9rem', color: '#555' }}>
+        Already have an account?{' '}
+        <Link
+          to="/login"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/login');
+          }}
+          style={{ color: '#2563eb', fontWeight: 500, textDecoration: 'none' }}
+        >
+          Log in
+        </Link>
+      </p>
     </div>
   );
 }
