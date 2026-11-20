@@ -27,11 +27,6 @@ function ChangePassword() {
 
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      setError('Please log in to change your password.');
-      return;
-    }
-
     setLoading(true);
 
     try {

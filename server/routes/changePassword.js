@@ -6,6 +6,14 @@ import pool from '../db.js';
 const router = Router();
 const minPasswordLength = 8;
 router.patch('/change-password', async (req, res) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({
+      code: 401,
+      message: 'Not authenticated.'
+    });
+  }
   const { current_password, new_password } = req.body || {};
 
   if (typeof current_password !== 'string' ||
@@ -21,14 +29,6 @@ router.patch('/change-password', async (req, res) => {
     return res.status(400).json({
       code: 400,
       message: 'Password must be at least 8 characters.'
-    });
-  }
-  const userId = req.user?.id;
-
-  if (!userId) {
-    return res.status(401).json({
-      code: 401,
-      message: 'Not authenticated.'
     });
   }
 
