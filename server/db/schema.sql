@@ -4,14 +4,20 @@ CREATE SCHEMA public;
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE CHECK (email = LOWER(email)),
     password_hash TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'STUDENT' CHECK (role IN ('STUDENT', 'ORGANIZER', 'ADMIN')),
-    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    role text NOT NULL CHECK (ROLE IN ('STUDENT', 'ORGANIZER', 'ADMIN')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    code INTEGER,
+    code_expiry_time TIMESTAMPTZ,
+    verified BOOLEAN NOT NULL DEFAULT false
 );
 
-CREATE TABLE allowed_role_emails (
-    email TEXT PRIMARY KEY,
-    role TEXT NOT NULL CHECK (role IN ('ORGANIZER', 'ADMIN'))
+CREATE TABLE password_reset_tokens (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL UNIQUE,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
