@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 
 const UNIVERSITY_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@(khi\.)?iba\.edu\.pk$/i;
 
