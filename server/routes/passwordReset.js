@@ -21,7 +21,7 @@ router.post('/forgot-password', async (req, res) => {
 
   try {
     const { rows } = await pool.query(
-      'SELECT id FROM users WHERE LOWER(email) = $1',
+      'SELECT id FROM users WHERE LOWER(email) = $1 AND verified = true',
       [email]
     );
 
@@ -43,7 +43,8 @@ router.post('/forgot-password', async (req, res) => {
       await sendPasswordResetEmail(email, resetToken);
     }
 
-    // Same reply whether or not the email exists (as written in the API doc).
+    // Same reply whether or not the email exists or is verified (as written in the API doc).
+    // Unverified accounts get no link (only verified accounts can reset a password).
     res.json({ data: { message: 'If this email is registered, a reset link has been sent.' } });
   } catch (err) {
     console.error(err);
