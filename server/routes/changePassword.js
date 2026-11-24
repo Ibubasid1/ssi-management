@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import pool from '../db.js';
+import { authenticate } from '../token.js';
 
 
 const router = Router();
 const minPasswordLength = 8;
-router.patch('/change-password', async (req, res) => {
+router.patch('/change-password', authenticate, async (req, res) => {
   const userId = req.user?.id;
 
   if (!userId) {
