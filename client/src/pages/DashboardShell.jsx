@@ -29,7 +29,7 @@ export default function DashboardShell({ title, children }) {
         <div>
           <h1 style={{ margin: 0, fontSize: 26 }}>{title}</h1>
           <p style={{ margin: '4px 0 0', fontSize: 14 }}>
-            Signed in as {user.role}
+            Signed in as {user.user_name} ({user.role})
           </p>
         </div>
         <button type="button" onClick={handleLogout} style={{ font: 'inherit', fontSize: 15, padding: '8px 14px', cursor: 'pointer' }}>

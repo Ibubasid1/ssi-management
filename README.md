@@ -13,7 +13,7 @@ git clone https://github.com/ibubasid1/ssi-management.git
 cd ssi-management
 npm ci
 psql -U postgres -c "CREATE DATABASE ssi_management;" #enter password when requested
-cp server/.env.example server/.env #copies example env file. you MUST replace password placeholder with your password
+cp server/.env.example server/.env #copies example env file. you MUST replace password placeholder with your password and email and pass placeholders as well
 npm run db:reset #creates the db and loads with test data
 npm run dev #this starts the server
 ```
