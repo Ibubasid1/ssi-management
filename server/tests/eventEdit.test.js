@@ -78,6 +78,18 @@ test('edit: pending event allows every field', () => {
   assert.deepEqual(r.changes, body);
 });
 
+test('edit: tags are lowercased and duplicates removed (same helper as create)', () => {
+  const r = checkEventEdit(pendingEvent, 7, { tags: ['Tech', ' tech ', 'AI'] }, now);
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.changes.tags, ['tech', 'ai']);
+});
+
+test('edit: more than 3 tags or a tag over 30 characters gets 400', () => {
+  assert.equal(checkEventEdit(pendingEvent, 7, { tags: ['a', 'b', 'c', 'd'] }, now).status, 400);
+  assert.equal(checkEventEdit(pendingEvent, 7, { tags: ['x'.repeat(31)] }, now).status, 400);
+  assert.equal(checkEventEdit(pendingEvent, 7, { tags: 'tech' }, now).status, 400);
+});
+
 test('edit: unknown fields are ignored (status cannot be changed by the organizer)', () => {
   const r = checkEventEdit(pendingEvent, 7, { venue: 'V', status: 'APPROVED', organizer_id: 1 }, now);
   assert.equal(r.ok, true);

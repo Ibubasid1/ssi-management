@@ -1,4 +1,5 @@
 import { validateEventFields } from './eventValidation.js';
+import { validateEventTags } from './utils/eventTags.js';
 
 // Fields an organizer may still change after the admin approved the event (API doc 2.4).
 export const EDITABLE_AFTER_APPROVAL = ['name', 'description', 'capacity', 'tags'];
@@ -36,8 +37,15 @@ export function checkEventEdit(event, userId, body, now = new Date()) {
     }
   }
 
-  const problem = validateEventFields(changes, now);
+  // Tags are checked by the tag story's helper (SCRUM-11), which also lowercases them.
+  const { tags, ...otherFields } = changes;
+  const problem = validateEventFields(otherFields, now);
   if (problem) return fail(400, problem);
+  if ('tags' in changes) {
+    const tagResult = validateEventTags(tags);
+    if (!tagResult.valid) return fail(tagResult.code, tagResult.message);
+    changes.tags = tagResult.tags;
+  }
 
   if ('capacity' in changes && changes.capacity < event.registered_count) {
     return fail(400, `Capacity cannot be lower than the ${event.registered_count} students already registered.`);
