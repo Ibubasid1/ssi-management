@@ -5,6 +5,7 @@ import verifyRouter from './routes/verify.js';
 import authRouter from './routes/auth.js';
 import passwordResetRouter from './routes/passwordReset.js';
 import changePasswordRouter from './routes/changePassword.js';
+import eventsRouter from './routes/events.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use('/api/auth', verifyRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/auth', passwordResetRouter);
 app.use('/api/auth', changePasswordRouter);
+app.use('/api/events', eventsRouter);
 
 app.use((err, req, res, next) => {
   if (err.status >= 400 && err.status < 500) return res.status(400).json({ code: 400, message: 'Invalid request body' });
