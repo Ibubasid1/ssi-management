@@ -1,3 +1,9 @@
+import DashboardShell from './DashboardShell.jsx';
+
 export default function OrganizerDashboard() {
-    return null;
+  return (
+    <DashboardShell title="Organizer Dashboard">
+      <p>Create events and manage registrations. (To be built.)</p>
+    </DashboardShell>
+  );
 }
