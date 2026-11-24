@@ -14,6 +14,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import ChangePassword from './pages/ChangePassword'
 import Verify from './pages/Verify'
 import CreateEvent from './pages/CreateEvent'
+import EditEvent from './pages/EditEvent'
 
 function RootRedirect() {
   const { user } = useAuth()
@@ -33,6 +34,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/student" element={<RequireRole roles={['STUDENT']}><StudentDashboard /></RequireRole>} />
         <Route path="/organizer" element={<RequireRole roles={['ORGANIZER']}><OrganizerDashboard /></RequireRole>} />
         <Route path="/organizer/events/new" element={<RequireRole roles={['ORGANIZER']}><CreateEvent /></RequireRole>} />
+        <Route path="/organizer/events/:id/edit" element={<RequireRole roles={['ORGANIZER']}><EditEvent /></RequireRole>} />
         <Route path="/admin" element={<RequireRole roles={['ADMIN']}><AdminDashboard /></RequireRole>} />
         <Route path="/change-password" element={<RequireRole roles={['STUDENT', 'ORGANIZER', 'ADMIN']}><ChangePassword /></RequireRole>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

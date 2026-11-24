@@ -5,6 +5,34 @@ import { checkEventEdit } from '../eventEditRules.js';
 
 const router = Router();
 
+const EVENT_COLUMNS = 'id, organizer_id, name, description, category, tags, date_time, venue, capacity, status';
+
+/**
+ * GET /events/{id} - organizer-only, so the Edit Event page can load the
+ * event's current values into the form. Not the public "view event" story
+ * (that one returns different fields and needs no login).
+ */
+router.get('/:id', authenticate, async (req, res) => {
+  const eventId = Number(req.params.id);
+  if (!Number.isInteger(eventId) || eventId <= 0) {
+    return res.status(404).json({ code: 404, message: 'Event not found.' });
+  }
+
+  try {
+    const { rows } = await pool.query(`SELECT ${EVENT_COLUMNS} FROM events WHERE id = $1`, [eventId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ code: 404, message: 'Event not found.' });
+    }
+    if (rows[0].organizer_id !== req.user.id) {
+      return res.status(403).json({ code: 403, message: 'You can only view your own events.' });
+    }
+    return res.json({ data: rows[0] });
+  } catch (err) {
+    console.error('Get event error:', err);
+    return res.status(500).json({ code: 500, message: 'Something went wrong. Please try again.' });
+  }
+});
+
 /**
  * 2.4 PATCH /events/{id}  (Requires Authorization)
  * 200 -> { data: { message } }
