@@ -1,0 +1,7 @@
+export const SCRUM24Permissions = {
+  STUDENT: ['STUDENT'],
+  ORGANIZER: ['ORGANIZER'],
+  ADMIN: ['ADMIN'],
+  ALL: ['STUDENT', 'ORGANIZER', 'ADMIN'],
+  ORGANIZER_ADMIN: ['ORGANIZER', 'ADMIN']
+};
